@@ -1156,14 +1156,14 @@ static bool sde_encoder_phys_cmd_is_autorefresh_enabled(
 	int ret;
 
 	if (!phys_enc)
-		return 0;
+		return false;
 
 	cmd_enc = to_sde_encoder_phys_cmd(phys_enc);
 	if (!cmd_enc->autorefresh.cfg.enable)
-		return 0;
+		return false;
 
 	if (!phys_enc->hw_pp || !phys_enc->hw_intf)
-		return 0;
+		return false;
 
 	if (!sde_encoder_phys_cmd_is_master(phys_enc))
 		return false;
