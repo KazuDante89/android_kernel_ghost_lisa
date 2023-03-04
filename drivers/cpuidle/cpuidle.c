@@ -758,21 +758,15 @@ EXPORT_SYMBOL_GPL(cpuidle_register);
  * wakes them all right up.
  */
  static int cpuidle_latency_notify(struct notifier_block *b,
- 		unsigned long l, void *v)
- {
- 	unsigned long cpus = atomic_read(&idled) & *cpumask_bits(to_cpumask(v));
+	 unsigned long l, void *v)
+{
+ wake_up_all_idle_cpus(v);
+ return NOTIFY_OK;
+}
 
- 	/* Use READ_ONCE to get the isolated mask outside cpu_add_remove_lock */
- 	cpus &= ~READ_ONCE(*cpumask_bits(cpu_isolated_mask));
- 	if (cpus)
- 		arch_send_wakeup_ipi_mask(to_cpumask(&cpus));
-
- 	return NOTIFY_OK;
- }
-
- static struct notifier_block cpuidle_latency_notifier = {
- 	.notifier_call = cpuidle_latency_notify,
- };
+static struct notifier_block cpuidle_latency_notifier = {
+ .notifier_call = cpuidle_latency_notify,
+};
 
 static inline void latency_notifier_init(struct notifier_block *n)
 {
