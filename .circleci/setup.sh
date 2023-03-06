@@ -33,5 +33,5 @@ echo "AnyKernel3 Completed"
 # Copy script over to source
 cd $KERNEL_SRC
 echo "$(pwd)"
-export $TC_DIR $KERNEL_SRC $OUTPUT $AK3_DIR
+export TC_DIR KERNEL_SRC OUTPUT AK3_DIR
 bash <(curl -s https://raw.githubusercontent.com/KazuDante89/android_kernel_ghost_lisa/Proton_R0.3/.circleci/CompileKernel.sh)
