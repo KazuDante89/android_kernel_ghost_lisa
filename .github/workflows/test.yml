@@ -1,0 +1,19 @@
+name: Test
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: atomxorg/arch-linux:kernel
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Run a one-line script
+      run: echo Hello, world!
+    - name: Run a multi-line script
+      run: |
+        wget https://raw.githubusercontent.com/KazuDante89/Cirrus-CI/main/setup.sh
+        ls
+        chmod a+x setup.sh
+        bash setup.sh
