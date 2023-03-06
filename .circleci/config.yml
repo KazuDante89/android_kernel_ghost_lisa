@@ -1,7 +1,6 @@
 version: 2.1
 jobs:
   compile:
-    working_directory: ~/workland
    docker:
       - image: ghcr.io/neutron-toolchains/docker-image:arch-neutron
    steps:
