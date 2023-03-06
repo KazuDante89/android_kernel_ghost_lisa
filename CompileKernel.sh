@@ -205,10 +205,10 @@ DATE=$(TZ=Asia/Kolkata date +"%Y%m%d-%T")
 	then
 		msger -n "|| Cloning LyN-clang ||"
     # Toolchain Directory defaults to clang-llvm
-    TC_DIR=$KERNEL_DIR/lynclang
+    TC_DIR=$KERNEL_DIR/clang-llvm
 		mkdir $TC_DIR
     cd $TC_DIR
-    bash <(curl -s https://raw.githubusercontent.com/Neutron-Toolchains/antman/main/antman) -S=latest
+    bash <(curl -s https://raw.githubusercontent.com/Neutron-Toolchains/antman/main/antman) -S=16012023
 		cd $KERNEL_DIR
 	fi
 
