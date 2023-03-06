@@ -1,10 +1,6 @@
 #!/usr/bin/env bash
 
 BASE_DIR="#(pwd)"
-KERNEL_SRC="$BASE_DIR"/Kernel
-AK3_DIR="$BASE_DIR"/AnyKernel3
-TC_DIR="$BASE_DIR"/clang
-OUTPUT="$KERNEL_SRC"/out
 
 # Helper function for cloning: gsc = git shallow clone
 gsc() {
@@ -13,19 +9,23 @@ gsc() {
 
 # Clone Neutron Clang
 echo "Downloading Neutron Clang"
-mkdir $TC_DIR
+mkdir $BASE_DIR/clang
+TC_DIR="$BASE_DIR"/clang
 cd $TC_DIR
 bash <(curl -s https://raw.githubusercontent.com/Neutron-Toolchains/antman/main/antman) -S=latest
 cd ../..
 
 # Clone Kernel Source
 echo "Downloading Kernel Source"
-mkdir $KERNEL_SRC
+mkdir $BASE_DIR/Kernel
+KERNEL_SRC="$BASE_DIR"/Kernel
+OUTPUT="$KERNEL_SRC"/out
 gsc https://github.com/KazuDante89/android_kernel_ghost_lisa.git -b Proton_R0.3 $KERNEL_SRC
 echo "Kernel Source Completed"
 
 echo "Cloning AnyKernel3"
-mkdir $AK3_DIR
+mkdir "$BASE_DIR"/AnyKernel3
+AK3_DIR="$BASE_DIR"/AnyKernel3
 gsc https://github.com/ghostrider-reborn/AnyKernel3.git -b lisa $AK3_DIR
 echo "AnyKernel3 Completed"
 
