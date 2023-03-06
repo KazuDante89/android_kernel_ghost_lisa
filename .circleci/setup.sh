@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-BASE_DIR="#(pwd)"
+BASE_DIR="$(pwd)"
 
 # Helper function for cloning: gsc = git shallow clone
 gsc() {
@@ -9,7 +9,7 @@ gsc() {
 
 # Clone Neutron Clang
 echo "Downloading Neutron Clang"
-mkdir $BASE_DIR/clang
+mkdir "$BASE_DIR"/clang
 TC_DIR="$BASE_DIR"/clang
 cd $TC_DIR
 bash <(curl -s https://raw.githubusercontent.com/Neutron-Toolchains/antman/main/antman) -S=16012023

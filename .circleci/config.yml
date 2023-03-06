@@ -3,6 +3,7 @@ jobs:
   compile:
    docker:
       - image: ghcr.io/neutron-toolchains/docker-image:arch-neutron
+      working_directory: ~/workland
    steps:
       - run:
           no_output_timeout: 50m
