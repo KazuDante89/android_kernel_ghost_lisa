@@ -203,12 +203,12 @@ DATE=$(TZ=Asia/Kolkata date +"%Y%m%d-%T")
 
 	if [ $COMPILER = "clang" ]
 	then
-		msger -n "|| Cloning Neutron-Clang 17 ||"
+		msger -n "|| Cloning LyN-clang ||"
     # Toolchain Directory defaults to clang-llvm
-    TC_DIR=$KERNEL_DIR/clang-llvm
+    TC_DIR=$KERNEL_DIR/lynclang
 		mkdir $TC_DIR
     cd $TC_DIR
-    bash <(curl -s https://raw.githubusercontent.com/Neutron-Toolchains/antman/main/antman) -S=16012023
+    git clone https://gitlab.com/lynnnnzx/clang-lyn.git $TC_DIR
 		cd $KERNEL_DIR
 	fi
 
