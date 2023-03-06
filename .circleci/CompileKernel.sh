@@ -94,7 +94,7 @@ PTTG=1
 if [ $PTTG = 1 ]
 then
 	# Set Telegram Chat ID
-	CHATID="-1001293242785"
+	CHATID="$chat_id"
 fi
 
 # Generate a full DEFCONFIG prior building. 1 is YES | 0 is NO(default)
@@ -186,14 +186,6 @@ COMMIT_HEAD=$(git log --oneline -1)
 
 # Set Date
 DATE=$(TZ=Asia/Kolkata date +"%Y%m%d-%T")
-
-#Now Its time for other stuffs like cloning, exporting, etc
-
- clone()
- {
-	msger -n "|| Cloning Anykernel ||"
-  AK3_DIR=$KERNEL_DIR/AnyKernel3
-	git clone https://github.com/ghostrider-reborn/AnyKernel3.git -b lisa $AK3_DIR
 
 ##------------------------------------------------------##
 
@@ -363,13 +355,12 @@ gen_zip()
 	cd ..
 }
 
-clone
 exports
 build_kernel
 
 if [ $LOG_DEBUG = "1" ]
 then
-	tg_post_build "error.log" "$CHATID" "Debug Mode Logs"
+	tg_post_build "error.log" "$chat_id" "Debug Mode Logs"
 fi
 
 ##----------------*****-----------------------------##

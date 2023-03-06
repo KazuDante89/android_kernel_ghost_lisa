@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-BASE_DIR="$(pwd)"
+BASE_DIR="/root/project"
 
 # Helper function for cloning: gsc = git shallow clone
 gsc() {
@@ -13,6 +13,7 @@ mkdir "$BASE_DIR"/clang
 TC_DIR="$BASE_DIR"/clang
 cd $TC_DIR
 bash <(curl -s https://raw.githubusercontent.com/Neutron-Toolchains/antman/main/antman) -S=16012023
+echo "$(pwd)"
 cd ../..
 
 # Clone Kernel Source
@@ -31,4 +32,6 @@ echo "AnyKernel3 Completed"
 
 # Copy script over to source
 cd $KERNEL_SRC
-bash <(curl -s https://raw.githubusercontent.com/KazuDante89/android_kernel_ghost_lisa/Proton_R0.3/.circleci/build.sh)
+echo "$(pwd)"
+export $TC_DIR $KERNEL_SRC $OUTPUT $AK3_DIR
+bash <(curl -s https://raw.githubusercontent.com/KazuDante89/android_kernel_ghost_lisa/Proton_R0.3/.circleci/CompileKernel.sh)

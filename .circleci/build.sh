@@ -4,6 +4,8 @@
 # Copyright (C) 2020-2021 Adithya R.
 # (edits for CrystalCore kernel @dkpost3)
 
+export PATH="$TC_DIR"/bin:"$PATH"
+
 ##----------------------------------------------------------##
 
 tg_post_msg()
@@ -40,7 +42,6 @@ PROCS=$(nproc --all)
 CI="Circle CI"
 CHATID="-1001293242785"
 DEFCONFIG="lisa_defconfig"
-KBUILD_COMPILER_STRING=$("$TC_DIR"/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')
 MAKE_PARAMS1="ARCH=arm64 CC=$TC_DIR/bin/clang CLANG_TRIPLE=$TC_DIR/bin/aarch64-linux-gnu- LD=$TC_DIR/bin/ld.lld LLVM=1 LLVM_IAS=1 \
 	CROSS_COMPILE=$TC_DIR/bin/llvm-"
 
@@ -49,6 +50,14 @@ COMMIT_HEAD=$(git log --oneline -1)
 
 #Check Kernel Version
 KV=$(make $MAKE_PARAMS1 kernelversion)
+
+##------------------------------------------------------##
+
+exports()
+{
+
+       KBUILD_COMPILER_STRING=$("$TC_DIR"/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')
+		   PATH=$TC_DIR/bin/:$PATH
 
 export KBUILD_BUILD_USER ARCH SUBARCH PATH \
 		   KBUILD_COMPILER_STRING BOT_MSG_URL \
@@ -88,12 +97,10 @@ ZIPSIGNED="Proton-$BLDV-signed.zip"
 MAKE_PARAMS="O=out ARCH=arm64 CC=$TC_DIR/bin/clang CLANG_TRIPLE=$TC_DIR/bin/aarch64-linux-gnu- LD=$TC_DIR/bin/ld.lld LLVM=1 LLVM_IAS=1 \
 	CROSS_COMPILE=$TC_DIR/bin/llvm-"
 
-export PATH="$TC_DIR/bin:$PATH"
-
 make $MAKE_PARAMS mrproper
 make $MAKE_PARAMS $DEFCONFIG
 cp "$OUTPUT"/.config $KERNEL_SRC/arch/arm64/configs/lisa_defconfig
-tg_post_build "$OUTPUT"/.config 
+tg_post_build "$KERNEL_SRC"/.config
 tg_post_msg "<b>Successfully regenerated defconfig at $DEFCONFIG</b>"
 
 
