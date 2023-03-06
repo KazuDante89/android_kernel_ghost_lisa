@@ -10,7 +10,6 @@ jobs:
            git config --global user.name "kazudante89"
            git config --global user.email "karlemmanueldorvil@gmail.com"
            git config --global color.ui false
-           https://github.com/KazuDante89/android_kernel_ghost_lisa.git -b Proton_R0.3 Kernel
            bash .circleci/setup.sh
 workflows:
   version: 2.1
