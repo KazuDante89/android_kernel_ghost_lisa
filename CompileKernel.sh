@@ -44,7 +44,7 @@ cdir()
 ##----------Basic Informations, COMPULSORY--------------##
 
 # The defult directory where the kernel should be placed
-KERNEL_DIR="$(pwd)"
+KERNEL_DIR="$KERNEL_SRC"
 BASEDIR="$(basename "$KERNEL_DIR")"
 
 # The name of the Kernel, to name the ZIP
@@ -191,37 +191,9 @@ DATE=$(TZ=Asia/Kolkata date +"%Y%m%d-%T")
 
  clone()
  {
-	echo " "
-	if [ $COMPILER = "gcc" ]
-	then
-		msger -n "|| Cloning GCC 9.3.0 baremetal ||"
-		git clone --depth=1 https://github.com/mvaisakh/gcc-arm64.git gcc64
-		git clone --depth=1 https://github.com/arter97/arm32-gcc.git gcc32
-		GCC64_DIR=$KERNEL_DIR/gcc64
-		GCC32_DIR=$KERNEL_DIR/gcc32
-	fi
-
-	if [ $COMPILER = "clang" ]
-	then
-		msger -n "|| Cloning LyN-clang ||"
-    # Toolchain Directory defaults to clang-llvm
-    TC_DIR=$KERNEL_DIR/clang-llvm
-		mkdir $TC_DIR
-    cd $TC_DIR
-    bash <(curl -s https://raw.githubusercontent.com/Neutron-Toolchains/antman/main/antman) -S=16012023
-		cd $KERNEL_DIR
-	fi
-
 	msger -n "|| Cloning Anykernel ||"
   AK3_DIR=$KERNEL_DIR/AnyKernel3
 	git clone https://github.com/ghostrider-reborn/AnyKernel3.git -b lisa $AK3_DIR
-
-	if [ $BUILD_DTBO = 1 ]
-	then
-		msger -n "|| Cloning libufdt ||"
-		git clone https://android.googlesource.com/platform/system/libufdt "$KERNEL_DIR"/scripts/ufdt/libufdt
-	fi
-}
 
 ##------------------------------------------------------##
 
@@ -253,7 +225,7 @@ exports()
 
 tg_post_msg()
 {
-	curl -s -X POST "$BOT_MSG_URL" -d chat_id="$CHATID" \
+	curl -s -X POST "$BOT_MSG_URL" -d chat_id="$chat_id" \
 	-d "disable_web_page_preview=true" \
 	-d "parse_mode=html" \
 	-d text="$1"
@@ -269,7 +241,7 @@ tg_post_build()
 
 	#Show the Checksum alongwith caption
 	curl --progress-bar -F document=@"$1" "$BOT_BUILD_URL" \
-	-F chat_id="$CHATID"  \
+	-F chat_id="$chat_id"  \
 	-F "disable_web_page_preview=true" \
 	-F "parse_mode=Markdown" \
 	-F caption="$2 | *MD5 Checksum : *\`$MD5CHECK\`"
@@ -282,7 +254,7 @@ build_kernel()
 	if [ $INCREMENTAL = 0 ]
 	then
 		msger -n "|| Cleaning Sources ||"
-		make mrproper && rm -rf out
+		make $MAKE_PARAMS mrproper && rm -rf out
 	fi
 
 	if [ "$PTTG" = 1 ]
