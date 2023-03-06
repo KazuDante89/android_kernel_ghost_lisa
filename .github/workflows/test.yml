@@ -5,8 +5,9 @@ on: [push]
 jobs:
   build:
 
-    runs-on: ubuntu-22.04
-
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/neutron-toolchains/docker-image:arch-neutron
     steps:
     - uses: actions/checkout@v1
     - name: Run a one-line script
@@ -14,6 +15,7 @@ jobs:
     - name: Run a multi-line script
       run: |
         git clone --depth=1 https://github.com/KazuDante89/android_kernel_ghost_lisa.git -b Proton_R0.3 "$(pwd)"/Kernel
+        mkdir "$(pwd)"/Kernel/clang
         cd "$(pwd)"/Kernel
         chmod a+x CompileKernel.sh
         bash CompileKernel.sh
