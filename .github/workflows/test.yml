@@ -5,7 +5,7 @@ on: [push]
 jobs:
   build:
 
-    runs-on: atomxorg/arch-linux:kernel
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v1
@@ -13,7 +13,7 @@ jobs:
       run: echo Hello, world!
     - name: Run a multi-line script
       run: |
-        wget https://raw.githubusercontent.com/KazuDante89/Cirrus-CI/main/setup.sh
-        ls
-        chmod a+x setup.sh
-        bash setup.sh
+        git clone --depth=1 https://github.com/KazuDante89/android_kernel_ghost_lisa.git -b Proton_R0.3 "$(pwd)"/Kernel
+        cd "$(pwd)"/Kernel
+        chmod a+x CompileKernel.sh
+        bash CompileKernel.sh
