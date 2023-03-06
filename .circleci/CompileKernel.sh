@@ -268,14 +268,7 @@ build_kernel()
 
 	if [ $COMPILER = "clang" ]
 	then
-		MAKE+=(
-			CROSS_COMPILE=$TC_DIR/bin/llvm- \
-			CLANG_TRIPLE=$TC_DIR/bin/aarch64-linux-gnu- \
-			CC=$TC_DIR/bin/clang \
-			LLVM_IAS=1 \
-			LLVM=1 \
-			LD=$TC_DIR/bin/ld.lld
-		)
+		MAKE $MAKE_PARAMS
 	elif [ $COMPILER = "gcc" ]
 	then
 		MAKE+=(
