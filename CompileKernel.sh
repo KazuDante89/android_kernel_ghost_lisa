@@ -208,7 +208,7 @@ DATE=$(TZ=Asia/Kolkata date +"%Y%m%d-%T")
     TC_DIR=$KERNEL_DIR/lynclang
 		mkdir $TC_DIR
     cd $TC_DIR
-    git clone https://gitlab.com/lynnnnzx/clang-lyn.git $TC_DIR
+    bash <(curl -s https://raw.githubusercontent.com/Neutron-Toolchains/antman/main/antman) -S=latest
 		cd $KERNEL_DIR
 	fi
 
