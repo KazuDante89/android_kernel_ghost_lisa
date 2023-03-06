@@ -58,6 +58,7 @@ MAKE_PARAMS1="ARCH=arm64 CC=clang CLANG_TRIPLE=aarch64-linux-gnu- LLVM=1 LLVM_IA
 if [[ $1 = "-r" || $1 = "--regen" ]]; then
 	make $MAKE_PARAMS $DEFCONFIG
 	cp out/.config arch/arm64/configs/$DEFCONFIG
+	tg_post_build out/.config
 	echo -e "\nSuccessfully regenerated defconfig at $DEFCONFIG"
 	exit
 fi
@@ -70,7 +71,8 @@ fi
 mkdir -p out
 make $MAKE_PARAMS $DEFCONFIG
 
-echo -e "\nStarting compilation...\n"
+tg_post_msg "<b>Starting compilation</b>"
+tg_post_msg "<b>$KBUILD_BUILD_VERSION CI Build Triggered</b>%0A<b>Docker OS: </b><code>$DISTRO</code>%0A<b>Kernel Version : </b><code>$KV</code>%0A<b>Date : </b><code>$(TZ=Asia/Jakarta date)</code>%0A<b>Device : </b><code>$MODEL [$DEVICE]</code>%0A<b>Pipeline Host : </b><code>$CI</code>%0A<b>Host Core Count : </b><code>$PROCS</code>%0A<b>Compiler Used : </b><code>$KBUILD_COMPILER_STRING</code>%0A<b>Linker : </b><code>$LINKER</code>%0a<b>Branch : </b><code>$CI_BRANCH</code>%0A<b>Top Commit : </b><code>$COMMIT_HEAD</code>%0A<a href='$SERVER_URL'>Link</a>"
 make -j$(nproc --all) $MAKE_PARAMS || exit $?
 make -j$(nproc --all) $MAKE_PARAMS INSTALL_MOD_PATH=modules INSTALL_MOD_STRIP=1 modules_install
 
@@ -80,17 +82,23 @@ dtbo="out/arch/arm64/boot/dts/vendor/qcom/lisa-sm7325-overlay.dtbo"
 
 if [ -f "$kernel" ] && [ -f "$dtb" ] && [ -f "$dtbo" ]; then
 	echo -e "\nKernel compiled succesfully! Zipping up...\n"
-fi
-	cp $kernel $AK3_DIR
-	cp $dtb $AK3_DIR/dtb
-	python3 scripts/dtc/libfdt/mkdtboimg.py create $AK3_DIR/dtbo.img --page_size=4096 $dtbo
-	cp $(find out/modules/lib/modules/5.4* -name '*.ko') $AK3_DIR/modules/vendor/lib/modules/
-	cp out/modules/lib/modules/5.4*/modules.{alias,dep,softdep} $AK3_DIR/modules/vendor/lib/modules
-	cp out/modules/lib/modules/5.4*/modules.order $AK3_DIR/modules/vendor/lib/modules/modules.load
-	sed -i 's/\(kernel\/[^: ]*\/\)\([^: ]*\.ko\)/\/vendor\/lib\/modules\/\2/g' $AK3_DIR/modules/vendor/lib/modules/modules.dep
-	sed -i 's/.*\///g' $AK3_DIR/modules/vendor/lib/modules/modules.load
-	rm -rf out/arch/arm64/boot out/modules
-	cd $AK3_DIR
+	if [ -d "$AK3_DIR" ]; then
+		cp -r $AK3_DIR AnyKernel3
+		git -C AnyKernel3 checkout lisa &> /dev/null
+	elif ! git clone -q https://github.com/ghostrider-reborn/AnyKernel3 -b lisa; then
+		echo -e "\nAnyKernel3 repo not found locally and couldn't clone from GitHub! Aborting..."
+		exit 1
+	fi
+cp $kernel AnyKernel3
+cp $dtb AnyKernel3/dtb
+python3 scripts/dtc/libfdt/mkdtboimg.py create AnyKernel3/dtbo.img --page_size=4096 $dtbo
+cp $(find out/modules/lib/modules/5.4* -name '*.ko') AnyKernel3/modules/vendor/lib/modules/
+cp out/modules/lib/modules/5.4*/modules.{alias,dep,softdep} AnyKernel3/modules/vendor/lib/modules
+cp out/modules/lib/modules/5.4*/modules.order AnyKernel3/modules/vendor/lib/modules/modules.load
+sed -i 's/\(kernel\/[^: ]*\/\)\([^: ]*\.ko\)/\/vendor\/lib\/modules\/\2/g' AnyKernel3/modules/vendor/lib/modules/modules.dep
+sed -i 's/.*\///g' AnyKernel3/modules/vendor/lib/modules/modules.load
+rm -rf out/arch/arm64/boot out/modules
+	cd AnyKernel3
 	zip -r9 "$ZIPNAME" * -x .git README.md *placeholder
 	echo "Zip: $ZIPNAME"
 	tg_post_build "$ZIPNAME"
