@@ -1,0 +1,22 @@
+---
+clone:
+  depth: 1
+kind: pipeline
+name: Kernel Kitchen
+
+workspace:
+  path: /drone/src
+
+steps:
+  -
+    commands:
+      - "export token=$TOKEN"
+      - bash test.sh
+    environment:
+      TOKEN:
+        from_secret: token
+    image: ghcr.io/neutron-toolchains/docker-image:arch-neutron
+    name: Neutron-Images
+    trigger:
+      branch:
+        - Proton_R0.3
