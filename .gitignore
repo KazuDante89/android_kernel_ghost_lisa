@@ -91,7 +91,7 @@ modules.order
 !.gitattributes
 !.gitignore
 !.mailmap
-!.drone.yml
+!CompileKernel.sh
 
 #
 # Generated include files
