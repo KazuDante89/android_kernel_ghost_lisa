@@ -51,7 +51,7 @@ BASEDIR="$(basename "$KERNEL_DIR")"
 ZIPNAME="Proton-$BLDV.zip"
 
 # The build version to also name the ZIP
-BLDV="R0.3-v0.0.0"
+BLDV="R0.3-v0.0.0.0"
 
 # Build Author
 # Take care, it should be a universal and most probably, case-sensitive
