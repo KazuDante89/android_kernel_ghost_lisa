@@ -57,7 +57,7 @@ AK3_DIR="$BASE_DIR/AnyKernel3"
 DEFCONFIG="lisa_defconfig"
 output="$BASE_DIR/Kernel/out"
 
-BLDV="R0.3-v0.0.7"
+BLDV="R0.3-v0.0.8"
 ZIPNAME="Proton-$BLDV.zip"
 
 MAKE_PARAMS="O=out ARCH=arm64 CC=clang CLANG_TRIPLE=aarch64-linux-gnu- LLVM=1 LLVM_IAS=1 \
