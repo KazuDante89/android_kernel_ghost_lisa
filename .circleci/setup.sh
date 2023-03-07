@@ -3,7 +3,7 @@
 # Install
 pip3 install telegram-send
 pip3 install --force-reinstall -v "python-telegram-bot==20.1"
-# End 
+# End
 
 BASE_DIR="/root/project"
 
@@ -17,7 +17,7 @@ echo "Downloading Neutron Clang"
 mkdir "$BASE_DIR"/clang
 TC_DIR="$BASE_DIR"/clang
 cd $TC_DIR
-bash <(curl -s https://raw.githubusercontent.com/Neutron-Toolchains/antman/main/antman) -S=16012023
+bash <(curl -s https://raw.githubusercontent.com/Neutron-Toolchains/antman/main/antman) -S=latest
 echo "$(pwd)"
 cd ../..
 
