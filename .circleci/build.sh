@@ -114,8 +114,10 @@ rm -rf out/arch/arm64/boot out/modules
 	zip -r9 "$ZIPNAME" * -x .git README.md *placeholder
 	echo "Zip: $ZIPNAME"
 	tg_post_build "$ZIPNAME"
+	python3 <(curl -s https://raw.githubusercontent.com/KazuDante89/android_kernel_ghost_lisa/Proton_R0.3/.circleci/test.py)
 	cd ..
 	rm -rf AnyKernel3
 	echo -e "\nCompleted in $((SECONDS / 60)) minute(s) and $((SECONDS % 60)) second(s) !"
 	exit 1
 fi
+exit 1
