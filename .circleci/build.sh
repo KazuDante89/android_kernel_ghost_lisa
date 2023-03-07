@@ -32,11 +32,14 @@ DEVICE="lisa"
 ARCH=arm64
 BOT_MSG_URL="https://api.telegram.org/bot$token/sendMessage"
 BOT_BUILD_URL="https://api.telegram.org/bot$token/sendDocument"
+DISTRO="Arch Neutron"
 CI="Circle CI"
+PROCS="$(nproc --all)"
 COMMIT_HEAD=$(git log --oneline -1)
 KV=$(make $MAKE_PARAMS1 kernelversion)
 KBUILD_COMPILER_STRING=$("$TC_DIR"/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')
 export PATH="$TC_DIR/bin:$PATH"
+export CI_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
 ##----------------------------------------------------------##
 
@@ -73,7 +76,7 @@ mkdir -p out
 make $MAKE_PARAMS $DEFCONFIG
 
 tg_post_msg "<b>Starting compilation</b>"
-tg_post_msg "<b>$KBUILD_BUILD_VERSION CI Build Triggered</b>%0A<b>Docker OS: </b><code>$DISTRO</code>%0A<b>Kernel Version : </b><code>$KV</code>%0A<b>Date : </b><code>$(TZ=Asia/Jakarta date)</code>%0A<b>Device : </b><code>$MODEL [$DEVICE]</code>%0A<b>Pipeline Host : </b><code>$CI</code>%0A<b>Host Core Count : </b><code>$PROCS</code>%0A<b>Compiler Used : </b><code>$KBUILD_COMPILER_STRING</code>%0A<b>Linker : </b><code>$LINKER</code>%0a<b>Branch : </b><code>$CI_BRANCH</code>%0A<b>Top Commit : </b><code>$COMMIT_HEAD</code>%0A<a href='$SERVER_URL'>Link</a>"
+tg_post_msg "<b>$KBUILD_BUILD_VERSION CI Build Triggered</b>%0A<b>Docker OS: </b><code>$DISTRO</code>%0A<b>Kernel Version : </b><code>$KV</code>%0A<b>Date : </b><code>$(TZ=America/Port-au-Prince date)</code>%0A<b>Device : </b><code>$MODEL</code>%0A<b>Device Codename : </b><code>$DEVICE</code>%0A<b>Pipeline Host : </b><code>$CI</code>%0A<b>Host Core Count : </b><code>$PROCS</code>%0A<b>Compiler Used : </b><code>$KBUILD_COMPILER_STRING</code>%0A<b>Branch : </b><code>$CI_BRANCH</code>%0A<b>Top Commit : </b><code>$COMMIT_HEAD</code>%0A<a href='$SERVER_URL'>Link</a>"
 make -j$(nproc --all) $MAKE_PARAMS || exit $?
 make -j$(nproc --all) $MAKE_PARAMS INSTALL_MOD_PATH=modules INSTALL_MOD_STRIP=1 modules_install
 
