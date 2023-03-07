@@ -5,9 +5,16 @@
 
 ##----------------------------------------------------------##
 
+tg_post()
+{
+curl -X POST -H "Content-Type:multipart/form-data" -F "chat_id=$chat_id" -F document=@"$ZIPNAME" -F "text=$1" 'https://api.telegram.org/bot${token}/sendDocument'
+
+curl -s --data "text=$1" --data "chat_id=$chat_id" 'https://api.telegram.org/bot${token}/sendMessage'
+}
+
 tg_post_msg()
 {
-	curl -s -X POST "$BOT_MSG_URL" -d chat_id="$chat_id" \
+	curl -X POST "$BOT_MSG_URL" -d chat_id="$chat_id" \
 	-d "disable_web_page_preview=true" \
 	-d "parse_mode=html" \
 	-d text="$1"
@@ -30,8 +37,9 @@ tg_post_build()
 MODEL="Xiaomi 11 Lite 5G NE"
 DEVICE="lisa"
 ARCH=arm64
-BOT_MSG_URL="https://api.telegram.org/bot$token/sendMessage"
-BOT_BUILD_URL="https://api.telegram.org/bot$token/sendDocument"
+BOT_MSG_URL="https://api.telegram.org/bot${token}/sendMessage"
+BOT_BUILD_URL="https://api.telegram.org/bot${token}/sendDocument"
+BOT_AUTH="https://api.telegram.org/bot${token}:authorization"
 DISTRO="Arch Neutron"
 CI="Circle CI"
 PROCS="$(nproc --all)"
@@ -49,7 +57,7 @@ AK3_DIR="$BASE_DIR/AnyKernel3"
 DEFCONFIG="lisa_defconfig"
 output="$BASE_DIR/Kernel/out"
 
-BLDV="R0.3-v0.0.1"
+BLDV="R0.3-v0.0.2"
 ZIPNAME="Proton-$BLDV.zip"
 
 MAKE_PARAMS="O=out ARCH=arm64 CC=clang CLANG_TRIPLE=aarch64-linux-gnu- LLVM=1 LLVM_IAS=1 \
@@ -61,8 +69,8 @@ MAKE_PARAMS1="ARCH=arm64 CC=clang CLANG_TRIPLE=aarch64-linux-gnu- LLVM=1 LLVM_IA
 if [[ $1 = "-r" || $1 = "--regen" ]]; then
 	make $MAKE_PARAMS $DEFCONFIG
 	cp .config arch/arm64/configs/$DEFCONFIG
-	tg_post_build .config
-	tg_post_build out/.config
+	tg_post .config
+	tg_post out/.config
 	echo -e "\nSuccessfully regenerated defconfig at $DEFCONFIG"
 	exit
 fi
