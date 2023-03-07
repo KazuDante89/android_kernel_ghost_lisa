@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# Install
+pip3 install telegram-send
+pip3 install --force-reinstall -v "python-telegram-bot==20.1"
+# End 
+
 BASE_DIR="/root/project"
 
 # Helper function for cloning: gsc = git shallow clone
