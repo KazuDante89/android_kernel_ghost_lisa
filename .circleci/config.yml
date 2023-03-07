@@ -1,5 +1,4 @@
 version: 2.1
-resource_class: xlarge
 jobs:
   compile:
    docker:
