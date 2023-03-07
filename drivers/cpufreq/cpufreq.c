@@ -2455,11 +2455,14 @@ static int cpufreq_set_policy(struct cpufreq_policy *policy,
 	new_data.max = freq_qos_read_value(&policy->constraints, FREQ_QOS_MAX);
 
 	   if (cpumask_test_cpu(policy->cpu, cpu_lp_mask))
+		     cpufreq_verify_within_limits(&new_data, 1516800, new_data.max); # This effects the min frequency
          cpufreq_verify_within_limits(&new_data, 1516800, new_data.min);
 else if (cpumask_test_cpu(policy->cpu, cpu_perf_mask))
+         cpufreq_verify_within_limits(&new_data, 691200, new_data.max); # This effects the min frequency
          cpufreq_verify_within_limits(&new_data, 1900800, new_data.min);
-else if (cpumask_test_cpu(policy->cpu, cpu_perfp_mask))
-         cpufreq_verify_within_limits(&new_data, 2208000, new_data.min);
+else if (cpumask_test_cpu(policy->cpu, cpu_prime_mask))
+         cpufreq_verify_within_limits(&new_data, 806400, new_data.max); # This effects the min frequency
+				 cpufreq_verify_within_limits(&new_data, 2208000, new_data.min);
 
 
 	pr_debug("setting new policy for CPU %u: %u - %u kHz\n",
