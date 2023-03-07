@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   compile:
    docker:
-      - image: ghcr.io/neutron-toolchains/docker-image:arch-neutron
+      image: ghcr.io/neutron-toolchains/docker-image:arch-neutron
       resource_class: xlarge
    steps:
       - run:
