@@ -77,7 +77,7 @@ static int _dsc_calc_ob_max_addr(struct sde_hw_dsc *hw_dsc, int num_ss)
 	return 0;
 }
 
-static inline _dsc_subblk_offset(struct sde_hw_dsc *hw_dsc, int s_id,
+static inline int _dsc_subblk_offset(struct sde_hw_dsc *hw_dsc, int s_id,
 		u32 *idx)
 {
 	const struct sde_dsc_sub_blks *sblk;
@@ -353,4 +353,3 @@ void sde_dsc1_2_setup_ops(struct sde_hw_dsc_ops *ops,
 	ops->dsc_config_thresh = sde_hw_dsc_config_thresh;
 	ops->bind_pingpong_blk = sde_hw_dsc_bind_pingpong_blk;
 }
-

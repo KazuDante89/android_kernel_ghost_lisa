@@ -727,7 +727,7 @@ static int usb_probe(struct usb_interface *interface, const struct usb_device_id
 
 	if (set_devicet_status(drv, e_ready) != e_ready) {
 		log_err("binding gadget device failed\n");
-		drv->disconnected = 1;
+		drv->disconnected = -1;
 	} else
 		log_dbg("binding gadget device successful\n");
 
@@ -759,7 +759,7 @@ static void usb_disconnect(struct usb_interface *intf)
 	log_dbg( "disconnect\n");
 
 	down_write(&drv->io_rwsem);
-	drv->disconnected = 1;
+	drv->disconnected = -1;
 	up_write(&drv->io_rwsem);
 	usb_kill_anchored_urbs(&drv->submitted);
 	misc_deregister(&usb_device);
@@ -808,4 +808,3 @@ module_usb_driver(usb_dtp_driver);
 MODULE_AUTHOR("Deng yongjian <dengyongjian@xiaomi.com>");
 MODULE_DESCRIPTION("USB DTP Host Driver");
 MODULE_LICENSE("GPL");
-
