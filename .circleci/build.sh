@@ -4,11 +4,10 @@
 # Copyright (C) 2020-2021 Adithya R.
 
 ##----------------------------------------------------------##
-TOKEN="$token"
 
 tg_post()
 {
-curl -X POST -H "Content-Type:multipart/form-data" -F "chat_id=$chat_id" -F document=@"$ZIPNAME" -F "text=$1" "https://api.telegram.org/bot$TOKEN/sendDocument"
+curl -X POST -H "Content-Type:multipart/form-data" -F "chat_id=$chat_id" -F document=@"$ZIPNAME" -F "text=$1" 'https://api.telegram.org/bot${token}/sendDocument'
 
 curl -s --data "text=$1" --data "chat_id=$chat_id" 'https://api.telegram.org/bot${token}/sendMessage'
 }
@@ -55,11 +54,8 @@ export CI_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 SECONDS=0 # builtin bash timer
 TC_DIR="$BASE_DIR/clang"
 AK3_DIR="$BASE_DIR/AnyKernel3"
-KERNEL_DIR="$BASE_DIR/Kernel"
-DEFCONFIG="$KERNEL_DIR/arch/arm64/configs/lisa_defconfig"
+DEFCONFIG="lisa_defconfig"
 output="$BASE_DIR/Kernel/out"
-CONFIG="$BASE_DIR/Kernel/.config"
-CONFIG1="$output/.config"
 
 BLDV="R0.4-v0.0.0"
 ZIPNAME="Proton-$BLDV.zip"
@@ -72,9 +68,9 @@ MAKE_PARAMS1="ARCH=arm64 CC=clang CLANG_TRIPLE=aarch64-linux-gnu- LLVM=1 LLVM_IA
 
 if [[ $1 = "-r" || $1 = "--regen" ]]; then
 	make $MAKE_PARAMS $DEFCONFIG
-	cp "$CONFIG1" "$arch/arm64/configs/$DEFCONFIG
-	tg_post "$CONFIG"
-	tg_post "$CONFIG1"
+	cp .config arch/arm64/configs/$DEFCONFIG
+	tg_post .config
+	tg_post out/.config
 	echo -e "\nSuccessfully regenerated defconfig at $DEFCONFIG"
 	exit
 fi
@@ -87,6 +83,7 @@ fi
 mkdir -p out
 make $MAKE_PARAMS $DEFCONFIG
 
+tg_post_msg "<b>Starting compilation</b>"
 tg_post_msg "<b>$KBUILD_BUILD_VERSION CI Build Triggered</b>%0A<b>Docker OS: </b><code>$DISTRO</code>%0A<b>Kernel Version : </b><code>$KV</code>%0A<b>Date : </b><code>$(TZ=America/Port-au-Prince date)</code>%0A<b>Device : </b><code>$MODEL</code>%0A<b>Device Codename : </b><code>$DEVICE</code>%0A<b>Pipeline Host : </b><code>$CI</code>%0A<b>Host Core Count : </b><code>$PROCS</code>%0A<b>Compiler Used : </b><code>$KBUILD_COMPILER_STRING</code>%0A<b>Branch : </b><code>$CI_BRANCH</code>%0A<b>Top Commit : </b><code>$COMMIT_HEAD</code>%0A<a href='$SERVER_URL'>Link</a>"
 make -j$(nproc --all) $MAKE_PARAMS || exit $?
 make -j$(nproc --all) $MAKE_PARAMS INSTALL_MOD_PATH=modules INSTALL_MOD_STRIP=1 modules_install
@@ -106,7 +103,6 @@ if [ -f "$kernel" ] && [ -f "$dtb" ] && [ -f "$dtbo" ]; then
 	fi
 cp $kernel AnyKernel3
 cp $dtb AnyKernel3/dtb
-tg_post "<b>Building DTBO</b>"
 python3 scripts/dtc/libfdt/mkdtboimg.py create AnyKernel3/dtbo.img --page_size=4096 $dtbo
 cp $(find out/modules/lib/modules/5.4* -name '*.ko') AnyKernel3/modules/vendor/lib/modules/
 cp out/modules/lib/modules/5.4*/modules.{alias,dep,softdep} AnyKernel3/modules/vendor/lib/modules
@@ -118,6 +114,7 @@ rm -rf out/arch/arm64/boot out/modules
 	zip -r9 "$ZIPNAME" * -x .git README.md *placeholder
 	echo "Zip: $ZIPNAME"
 	tg_post_build "$ZIPNAME"
+	python3 <(curl -s https://raw.githubusercontent.com/KazuDante89/android_kernel_ghost_lisa/Proton_R0.3/.circleci/test.py)
 	cd ..
 	rm -rf AnyKernel3
 	echo -e "\nCompleted in $((SECONDS / 60)) minute(s) and $((SECONDS % 60)) second(s) !"
