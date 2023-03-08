@@ -39,4 +39,4 @@ echo "AnyKernel3 Completed"
 cd $KERNEL_SRC
 echo "$(pwd)"
 export TC_DIR KERNEL_SRC OUTPUT AK3_DIR
-bash <(curl -s https://raw.githubusercontent.com/KazuDante89/android_kernel_ghost_lisa/Proton_R0.4/.circleci/build.sh)
+bash <(curl -s https://raw.githubusercontent.com/KazuDante89/android_kernel_ghost_lisa/Proton_R0.5/.circleci/build.sh)
