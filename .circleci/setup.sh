@@ -17,7 +17,7 @@ echo "Downloading Neutron Clang"
 mkdir "$BASE_DIR"/clang
 TC_DIR="$BASE_DIR"/clang
 cd $TC_DIR
-bash <(curl -s https://raw.githubusercontent.com/Neutron-Toolchains/antman/main/antman) -S=latest
+bash <(curl -s https://raw.githubusercontent.com/Neutron-Toolchains/antman/main/antman) -S=16012023
 echo "$(pwd)"
 cd ../..
 
