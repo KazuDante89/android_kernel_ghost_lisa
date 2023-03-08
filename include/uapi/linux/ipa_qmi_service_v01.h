@@ -919,7 +919,7 @@ struct ipa_filter_spec_type_v01 {
 	 *	is applicable only in the filter install request and response.
 	 */
 
-	uint16_t ip_type; ip_type;
+	uint16_t ip_type;
 	/*	This field identifies the IP type for which this rule is
 	 *	applicable. The driver needs to identify the filter table
 	 *	(V6 or V4) and this field is essential for that
