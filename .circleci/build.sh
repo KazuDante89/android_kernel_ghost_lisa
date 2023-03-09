@@ -54,10 +54,14 @@ export CI_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 SECONDS=0 # builtin bash timer
 TC_DIR="$BASE_DIR/clang"
 AK3_DIR="$BASE_DIR/AnyKernel3"
+KERNEL_DIR="$KERNEL_SRC"
 DEFCONFIG="lisa_defconfig"
+DEF_DIR="$KERNEL_DIR/arch/arm64/configs/lisa_defconfig"
 output="$BASE_DIR/Kernel/out"
+KERNEL_DIR="$KERNEL_SRC"
+DEF_REGENED="$KERNEL_DIR/out/.config"
 
-BLDV="v0.0.0"
+BLDV="v0.0.1"
 ZIPNAME="Proton-$BRANCH-$BLDV.zip"
 
 MAKE_PARAMS="O=out ARCH=arm64 CC=clang CLANG_TRIPLE=aarch64-linux-gnu- LLVM=1 LLVM_IAS=1 \
@@ -68,9 +72,8 @@ MAKE_PARAMS1="ARCH=arm64 CC=clang CLANG_TRIPLE=aarch64-linux-gnu- LLVM=1 LLVM_IA
 
 if [[ $1 = "-r" || $1 = "--regen" ]]; then
 	make $MAKE_PARAMS $DEFCONFIG
-	cp .config arch/arm64/configs/$DEFCONFIG
-	tg_post .config
-	tg_post out/.config
+	cp $DEF_REGENED $DEF_DIR
+	tg_post_build $DEF_REGENED
 	echo -e "\nSuccessfully regenerated defconfig at $DEFCONFIG"
 	exit
 fi
@@ -103,7 +106,8 @@ if [ -f "$kernel" ] && [ -f "$dtb" ] && [ -f "$dtbo" ]; then
 	fi
 cp $kernel AnyKernel3
 cp $dtb AnyKernel3/dtb
-python3 scripts/dtc/libfdt/mkdtboimg.py create AnyKernel3/dtbo.img --page_size=4096 $dtbo
+tg_post_build "$dtbo"
+python3 .circleci/mkdtboimg.py create AnyKernel3/dtbo.img --page_size=4096 $dtbo
 cp $(find out/modules/lib/modules/5.4* -name '*.ko') AnyKernel3/modules/vendor/lib/modules/
 cp out/modules/lib/modules/5.4*/modules.{alias,dep,softdep} AnyKernel3/modules/vendor/lib/modules
 cp out/modules/lib/modules/5.4*/modules.order AnyKernel3/modules/vendor/lib/modules/modules.load
