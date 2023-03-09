@@ -61,7 +61,7 @@ output="$BASE_DIR/Kernel/out"
 KERNEL_DIR="$KERNEL_SRC"
 DEF_REGENED="$(pwd)"/.config
 
-BLDV="v0.0.2"
+BLDV="v0.0.3"
 ZIPNAME="Proton-$BRANCH-$BLDV.zip"
 
 MAKE_PARAMS="O=out ARCH=arm64 CC=clang CLANG_TRIPLE=aarch64-linux-gnu- LLVM=1 LLVM_IAS=1 \
@@ -73,8 +73,9 @@ MAKE_PARAMS1="ARCH=arm64 CC=clang CLANG_TRIPLE=aarch64-linux-gnu- LLVM=1 LLVM_IA
 if [[ $1 = "-r" || $1 = "--regen" ]]; then
 	make "$MAKE_PARAMS" "$DEFCONFIG"
 	cp "$DEF_REGENED" "$DEFCONFIG"
+	if [ -f "$DEF_REGENED"];then
 	tg_post_build "$DEF_REGENED"
-	echo -e "\nSuccessfully regenerated defconfig at $DEFCONFIG"
+	tg_post_msg "<b>Successfully regenerated defconfig at $DEFCONFIG</b>"
 	exit
 fi
 
@@ -86,7 +87,7 @@ fi
 mkdir -p out
 make $MAKE_PARAMS $DEFCONFIG
 
-tg_post_msg "<b>Starting compilation</b>"
+tg_post_msg "<b>Phase 1 - Starting compilation</b>"
 tg_post_msg "<b>$KBUILD_BUILD_VERSION CI Build Triggered</b>%0A<b>Docker OS: </b><code>$DISTRO</code>%0A<b>Kernel Version : </b><code>$KV</code>%0A<b>Date : </b><code>$(TZ=America/Port-au-Prince date)</code>%0A<b>Device : </b><code>$MODEL</code>%0A<b>Device Codename : </b><code>$DEVICE</code>%0A<b>Pipeline Host : </b><code>$CI</code>%0A<b>Host Core Count : </b><code>$PROCS</code>%0A<b>Compiler Used : </b><code>$KBUILD_COMPILER_STRING</code>%0A<b>Branch : </b><code>$CI_BRANCH</code>%0A<b>Top Commit : </b><code>$COMMIT_HEAD</code>%0A<a href='$SERVER_URL'>Link</a>"
 make -j$(nproc --all) $MAKE_PARAMS || exit $?
 make -j$(nproc --all) $MAKE_PARAMS INSTALL_MOD_PATH=modules INSTALL_MOD_STRIP=1 modules_install
@@ -94,9 +95,10 @@ make -j$(nproc --all) $MAKE_PARAMS INSTALL_MOD_PATH=modules INSTALL_MOD_STRIP=1 
 kernel="out/arch/arm64/boot/Image"
 dtb="out/arch/arm64/boot/dts/vendor/qcom/yupik.dtb"
 dtbo="out/arch/arm64/boot/dts/vendor/qcom/lisa-sm7325-overlay.dtbo"
+dtboimg="AnyKernel3/dtbo.img"
 
 if [ -f "$kernel" ] && [ -f "$dtb" ] && [ -f "$dtbo" ]; then
-	echo -e "\nKernel compiled succesfully! Zipping up...\n"
+tg_post_msg "<b>Phase 2 - Image , DTB & DTBO compiled succesfully! Zipping up...</b>"
 	if [ -d "$AK3_DIR" ]; then
 		cp -r $AK3_DIR AnyKernel3
 		git -C AnyKernel3 checkout lisa &> /dev/null
@@ -106,8 +108,9 @@ if [ -f "$kernel" ] && [ -f "$dtb" ] && [ -f "$dtbo" ]; then
 	fi
 cp $kernel AnyKernel3
 cp $dtb AnyKernel3/dtb
-tg_post_build "$dtbo"
 python3 .circleci/mkdtboimg.py create AnyKernel3/dtbo.img --page_size=4096 $dtbo
+if [ -f "$dtboimg" ];then
+tg_post_msg "<b>Phase 4 - DTBO Image Complete</b>"
 cp $(find out/modules/lib/modules/5.4* -name '*.ko') AnyKernel3/modules/vendor/lib/modules/
 cp out/modules/lib/modules/5.4*/modules.{alias,dep,softdep} AnyKernel3/modules/vendor/lib/modules
 cp out/modules/lib/modules/5.4*/modules.order AnyKernel3/modules/vendor/lib/modules/modules.load
