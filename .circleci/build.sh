@@ -59,9 +59,9 @@ DEFCONFIG="lisa_defconfig"
 DEF_DIR="$KERNEL_DIR/arch/arm64/configs/lisa_defconfig"
 output="$BASE_DIR/Kernel/out"
 KERNEL_DIR="$KERNEL_SRC"
-DEF_REGENED="$KERNEL_DIR/out/.config"
+DEF_REGENED="$(pwd)"/.config
 
-BLDV="v0.0.1"
+BLDV="v0.0.2"
 ZIPNAME="Proton-$BRANCH-$BLDV.zip"
 
 MAKE_PARAMS="O=out ARCH=arm64 CC=clang CLANG_TRIPLE=aarch64-linux-gnu- LLVM=1 LLVM_IAS=1 \
@@ -71,9 +71,9 @@ MAKE_PARAMS1="ARCH=arm64 CC=clang CLANG_TRIPLE=aarch64-linux-gnu- LLVM=1 LLVM_IA
 	CROSS_COMPILE=$TC_DIR/bin/llvm-"
 
 if [[ $1 = "-r" || $1 = "--regen" ]]; then
-	make $MAKE_PARAMS $DEFCONFIG
-	cp $DEF_REGENED $DEF_DIR
-	tg_post_build $DEF_REGENED
+	make "$MAKE_PARAMS" "$DEFCONFIG"
+	cp "$DEF_REGENED" "$DEFCONFIG"
+	tg_post_build "$DEF_REGENED"
 	echo -e "\nSuccessfully regenerated defconfig at $DEFCONFIG"
 	exit
 fi
