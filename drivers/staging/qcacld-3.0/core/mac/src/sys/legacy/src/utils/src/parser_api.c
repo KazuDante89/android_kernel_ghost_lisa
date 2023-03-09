@@ -6158,8 +6158,7 @@ QDF_STATUS populate_dot11f_rrm_ie(struct mac_context *mac,
 	return QDF_STATUS_SUCCESS;
 }
 
-void populate_mdie(struct mac_context *mac,
-		   tDot11fIEMobilityDomain *pDot11f,
+void populate_mdie(struct mac_context *mac, tDot11fIEMobilityDomain *pDot11f,
 		   uint8_t mdie[SIR_MDIE_SIZE])
 {
 	pDot11f->present = 1;
