@@ -61,7 +61,7 @@ output="$BASE_DIR/Kernel/out"
 KERNEL_DIR="$KERNEL_SRC"
 DEF_REGENED="$(pwd)"/.config
 
-BLDV="v0.0.4"
+BLDV="v0.0.5"
 ZIPNAME="Proton-$BRANCH-$BLDV.zip"
 
 MAKE_PARAMS="O=out ARCH=arm64 CC=clang CLANG_TRIPLE=aarch64-linux-gnu- LLVM=1 LLVM_IAS=1 \
