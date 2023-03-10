@@ -5,13 +5,6 @@
 
 ##----------------------------------------------------------##
 
-tg_post()
-{
-curl -X POST -H "Content-Type:multipart/form-data" -F "chat_id=$chat_id" -F document=@"$ZIPNAME" -F "text=$1" 'https://api.telegram.org/bot${token}/sendDocument'
-
-curl -s --data "text=$1" --data "chat_id=$chat_id" 'https://api.telegram.org/bot${token}/sendMessage'
-}
-
 tg_post_msg()
 {
 	curl -X POST "$BOT_MSG_URL" -d chat_id="$chat_id" \
@@ -57,11 +50,9 @@ AK3_DIR="$BASE_DIR/AnyKernel3"
 KERNEL_DIR="$KERNEL_SRC"
 DEFCONFIG="lisa_defconfig"
 DEF_DIR="$KERNEL_DIR/arch/arm64/configs/lisa_defconfig"
-output="$BASE_DIR/Kernel/out"
-KERNEL_DIR="$KERNEL_SRC"
-DEF_REGENED="$(pwd)"/.config
+DEF_REGENED=".config"
 
-BLDV="v0.0.5"
+BLDV="v0.0.6"
 ZIPNAME="Proton-$BRANCH-$BLDV.zip"
 
 MAKE_PARAMS="O=out ARCH=arm64 CC=clang CLANG_TRIPLE=aarch64-linux-gnu- LLVM=1 LLVM_IAS=1 \
@@ -72,9 +63,11 @@ MAKE_PARAMS1="ARCH=arm64 CC=clang CLANG_TRIPLE=aarch64-linux-gnu- LLVM=1 LLVM_IA
 
 if [[ $1 = "-r" || $1 = "--regen" ]]; then
 	make "$MAKE_PARAMS" "$DEFCONFIG"
-	cp "$DEF_REGENED" "$DEFCONFIG"
+	cd "$(pwd)"/out
+	cp "$DEF_REGENED" "$DEF_DIR"
 	tg_post_build "$DEF_REGENED"
-	echo -e "\nSuccessfully regenerated defconfig at $DEFCONFIG"
+	echo -e "\nSuccessfully regenerated defconfig at $DEF_DIR"
+	cd "$KERNEL_DIR"
 	exit
 fi
 
