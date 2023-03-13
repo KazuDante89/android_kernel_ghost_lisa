@@ -27,6 +27,21 @@ tg_post_build()
 	-F caption="$2 | *MD5 Checksum : *\`$MD5CHECK\`"
 }
 
+send_msg() {
+    "${TELEGRAM}" -H -D \
+        "$(
+            for POST in "${@}"; do
+                echo "${POST}"
+            done
+        )"
+}
+
+send_file() {
+    "${TELEGRAM}" -H \
+        -f "$1" \
+        "$2"
+}
+
 MODEL="Xiaomi 11 Lite 5G NE"
 DEVICE="lisa"
 ARCH=arm64
@@ -52,7 +67,7 @@ DEFCONFIG="lisa_defconfig"
 DEF_DIR="$KERNEL_DIR/arch/arm64/configs/lisa_defconfig"
 DEF_REGENED=".config"
 
-BLDV="v0.0.0"
+BLDV="v0.0.1"
 ZIPNAME="Proton-$BRANCH-$BLDV.zip"
 
 MAKE_PARAMS="O=out ARCH=arm64 CC=clang CLANG_TRIPLE=aarch64-linux-gnu- LLVM=1 LLVM_IAS=1 \
@@ -65,7 +80,7 @@ if [[ $1 = "-r" || $1 = "--regen" ]]; then
 	make "$MAKE_PARAMS" "$DEFCONFIG"
 	cd "$(pwd)"/out
 	cp "$DEF_REGENED" "$DEF_DIR"
-	tg_post_build "$DEF_REGENED"
+	send_file "$DEF_REGENED"
 	echo -e "\nSuccessfully regenerated defconfig at $DEF_DIR"
 	cd "$KERNEL_DIR"
 	exit

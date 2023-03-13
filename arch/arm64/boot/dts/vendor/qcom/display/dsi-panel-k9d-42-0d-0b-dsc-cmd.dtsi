@@ -65,7 +65,7 @@
 				qcom,mdss-dsi-v-bottom-border = <0>;
 				qcom,mdss-dsi-panel-clockrate = <682000000>;
 				qcom,mdss-dsi-panel-jitter = <0x05 0x01>;
-				qcom,mdss-mdp-transfer-time-us = <9500>;
+				qcom,mdss-mdp-transfer-time-us = <7550>;
 				qcom,mdss-dsi-on-command = [
 					15 01 00 00 00 00 02 03 01
 					39 01 00 00 00 00 03 F0 AA 10
@@ -156,7 +156,7 @@
 				qcom,mdss-dsi-timing-switch-command = [
 					15 01 00 00 0C 00 02 6C 00
 				];
-				qcom,mdss-dsi-timing-switch-command-state = "dsi_lp_mode";
+				qcom,mdss-dsi-timing-switch-command-state = "dsi_hs_mode";
 
 				qcom,mdss-dsi-nolp-command = [
 					05 01 00 00 00 00 01 38
@@ -197,7 +197,7 @@
 				qcom,mdss-dsi-v-bottom-border = <0>;
 				qcom,mdss-dsi-panel-clockrate = <682000000>;
 				qcom,mdss-dsi-panel-jitter = <0x05 0x01>;
-				qcom,mdss-mdp-transfer-time-us = <9500>;
+				qcom,mdss-mdp-transfer-time-us = <7550>;
 				qcom,mdss-dsi-on-command = [
 					15 01 00 00 00 00 02 03 01
 					39 01 00 00 00 00 03 F0 AA 10
@@ -272,7 +272,7 @@
 				qcom,mdss-dsi-timing-switch-command = [
 					15 01 00 00 0C 00 02 6C 01
 				];
-				qcom,mdss-dsi-timing-switch-command-state = "dsi_lp_mode";
+				qcom,mdss-dsi-timing-switch-command-state = "dsi_hs_mode";
 
 				qcom,mdss-dsi-nolp-command = [
 					05 01 00 00 00 00 01 38

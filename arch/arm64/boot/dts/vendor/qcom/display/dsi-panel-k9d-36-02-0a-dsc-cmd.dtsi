@@ -67,7 +67,7 @@
 				qcom,mdss-dsi-v-bottom-border = <0>;
 				qcom,mdss-dsi-panel-clockrate = <682000000>;
 				qcom,mdss-dsi-panel-jitter = <0x05 0x01>;
-				qcom,mdss-mdp-transfer-time-us = <15700>;
+				qcom,mdss-mdp-transfer-time-us = <7550>;
 				qcom,mdss-dsi-on-command = [
 					39 01 00 00 00 00 06 F0 55 AA 52 08 00
 					39 00 00 00 00 00 09 BA 01 E6 00 10 00 30 00 01
@@ -232,7 +232,7 @@
 					05 01 00 00 10 00 02 29 00
 				];
 				qcom,mdss-dsi-off-command = [
-					05 01 00 00 14 00 02 28 00 
+					05 01 00 00 14 00 02 28 00
 					05 01 00 00 50 00 02 10 00
 				];
 				qcom,mdss-dsi-on-command-state = "dsi_lp_mode";
@@ -241,10 +241,10 @@
 				qcom,mdss-dsi-timing-switch-command = [
 					15 01 00 00 00 00 02 2F 02
 				];
-				qcom,mdss-dsi-timing-switch-command-state = "dsi_lp_mode";
+				qcom,mdss-dsi-timing-switch-command-state = "dsi_hs_mode";
 
 				qcom,mdss-dsi-nolp-command = [
-					15 01 00 00 00 00 02 65 00 
+					15 01 00 00 00 00 02 65 00
 					05 01 00 00 07 00 01 38
 					39 01 00 00 00 00 06 F0 55 AA 52 08 01
 					39 01 00 00 1B 00 05 BA 10 1A 10 1A
@@ -286,7 +286,7 @@
 				qcom,mdss-dsi-v-bottom-border = <0>;
 				qcom,mdss-dsi-panel-clockrate = <682000000>;
 				qcom,mdss-dsi-panel-jitter = <0x05 0x01>;
-				qcom,mdss-mdp-transfer-time-us = <9500>;
+				qcom,mdss-mdp-transfer-time-us = <7550>;
 				qcom,mdss-dsi-on-command = [
 					39 01 00 00 00 00 06 F0 55 AA 52 08 00
 					39 00 00 00 00 00 09 BA 01 E6 00 10 00 30 00 01
@@ -451,7 +451,7 @@
 					05 01 00 00 10 00 02 29 00
 				];
 				qcom,mdss-dsi-off-command = [
-					05 01 00 00 14 00 02 28 00 
+					05 01 00 00 14 00 02 28 00
 					05 01 00 00 50 00 02 10 00
 				];
 				qcom,mdss-dsi-on-command-state = "dsi_lp_mode";
@@ -460,10 +460,10 @@
 				qcom,mdss-dsi-timing-switch-command = [
 					15 01 00 00 00 00 02 2F 01
 				];
-				qcom,mdss-dsi-timing-switch-command-state = "dsi_lp_mode";
+				qcom,mdss-dsi-timing-switch-command-state = "dsi_hs_mode";
 
 				qcom,mdss-dsi-nolp-command = [
-					15 01 00 00 00 00 02 65 00 
+					15 01 00 00 00 00 02 65 00
 					05 01 00 00 07 00 01 38
 					39 00 00 00 00 00 06 F0 55 AA 52 08 01
 					39 01 00 00 1B 00 05 BA 10 1A 10 1A

@@ -12,6 +12,11 @@ gsc() {
 	git clone --depth=1 -q $@
 }
 
+# Setup Telegram
+mkdir "$BASE_DIR"/Telegram
+TELEGRAM="$BASE_DIR/Telegram/telegram"
+git clone --depth=1 https://github.com/XSans0/Telegram $Telegram
+
 # Clone Neutron Clang
 echo "Downloading Neutron Clang"
 mkdir "$BASE_DIR"/clang
@@ -37,7 +42,7 @@ gsc https://github.com/ghostrider-reborn/AnyKernel3.git -b lisa $AK3_DIR
 echo "AnyKernel3 Completed"
 
 # Exports
-export TC_DIR KERNEL_SRC OUTPUT AK3_DIR BRANCH BASE_DIR
+export TC_DIR KERNEL_SRC OUTPUT AK3_DIR BRANCH BASE_DIR TELEGRAM
 
 # Copy script over to source
 cd $KERNEL_SRC
