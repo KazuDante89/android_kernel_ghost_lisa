@@ -4168,6 +4168,7 @@
 					qcom,qos-cores = <0 1 2 3>;
 					qcom,qos-latency-us = <70>;
 					qcom,qos-maxhold-ms = <20>;
+					qcom,qos-cores = <0 1 2 3>;
 				};
 			};
 		};
