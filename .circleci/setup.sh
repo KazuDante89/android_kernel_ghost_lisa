@@ -18,11 +18,21 @@ TELEGRAM="$BASE_DIR/Telegram/telegram"
 git clone --depth=1 https://github.com/XSans0/Telegram $Telegram
 
 # Clone Neutron Clang
-echo "Downloading Neutron Clang"
+# echo "Downloading Neutron Clang"
+# mkdir "$BASE_DIR"/clang
+# TC_DIR="$BASE_DIR"/clang
+# cd $TC_DIR
+# bash <(curl -s https://raw.githubusercontent.com/Neutron-Toolchains/antman/main/antman) -S=latest
+# echo "$(pwd)"
+# cd ../..
+
+# Clone WeebX Clang
+echo "Downloading WeebX Clang"
 mkdir "$BASE_DIR"/clang
 TC_DIR="$BASE_DIR"/clang
+wget "$(curl -s https://raw.githubusercontent.com/XSans0/WeebX-Clang/main/main/link.txt)" -O "weebx-clang.tar.gz"
+tar -xf weebx-clang.tar.gz -C "$BASE_DIR"/clang && rm -rf "$BASE_DIR"/weebx-clang.tar.gz
 cd $TC_DIR
-bash <(curl -s https://raw.githubusercontent.com/Neutron-Toolchains/antman/main/antman) -S=latest
 echo "$(pwd)"
 cd ../..
 
