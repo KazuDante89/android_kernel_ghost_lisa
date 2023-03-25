@@ -5,13 +5,6 @@
 
 ##----------------------------------------------------------##
 
-tg_post()
-{
-curl -X POST -H "Content-Type:multipart/form-data" -F "chat_id=$chat_id" -F document=@"$ZIPNAME" -F "text=$1" 'https://api.telegram.org/bot${token}/sendDocument'
-
-curl -s --data "text=$1" --data "chat_id=$chat_id" 'https://api.telegram.org/bot${token}/sendMessage'
-}
-
 tg_post_msg()
 {
 	curl -X POST "$BOT_MSG_URL" -d chat_id="$chat_id" \
@@ -34,6 +27,21 @@ tg_post_build()
 	-F caption="$2 | *MD5 Checksum : *\`$MD5CHECK\`"
 }
 
+send_msg() {
+    "${TELEGRAM}" -H -D \
+        "$(
+            for POST in "${@}"; do
+                echo "${POST}"
+            done
+        )"
+}
+
+send_file() {
+    "${TELEGRAM}" -H \
+        -f "$1" \
+        "$2"
+}
+
 MODEL="Xiaomi 11 Lite 5G NE"
 DEVICE="lisa"
 ARCH=arm64
@@ -54,14 +62,18 @@ export CI_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 SECONDS=0 # builtin bash timer
 TC_DIR="$BASE_DIR/clang"
 AK3_DIR="$BASE_DIR/AnyKernel3"
-KERNEL_DIR="$KERNEL_SRC"
-DEFCONFIG="lisa_defconfig"
-DEF_DIR="$KERNEL_DIR/arch/arm64/configs/lisa_defconfig"
-output="$BASE_DIR/Kernel/out"
-KERNEL_DIR="$KERNEL_SRC"
-DEF_REGENED="$(pwd)"/.config
 
-BLDV="v0.0.2"
+#
+# Compile script for QuicksilveR kernel
+# Copyright (C) 2020-2021 Adithya R.
+# (edits for CrystalCore kernel @dkpost3)
+
+SECONDS=0 # builtin bash timer
+DEFCONFIG="lisa_defconfig"
+DEFREGENED="out/.config"
+MAIN_DEF="arch/arm64/configs/lisa_defconfig"
+
+BLDV="v0.0.0.0"
 ZIPNAME="Proton-$BRANCH-$BLDV.zip"
 
 MAKE_PARAMS="O=out ARCH=arm64 CC=clang CLANG_TRIPLE=aarch64-linux-gnu- LLVM=1 LLVM_IAS=1 \
@@ -70,18 +82,17 @@ MAKE_PARAMS="O=out ARCH=arm64 CC=clang CLANG_TRIPLE=aarch64-linux-gnu- LLVM=1 LL
 MAKE_PARAMS1="ARCH=arm64 CC=clang CLANG_TRIPLE=aarch64-linux-gnu- LLVM=1 LLVM_IAS=1 \
 	CROSS_COMPILE=$TC_DIR/bin/llvm-"
 
-if [[ $1 = "-r" || $1 = "--regen" ]]; then
-	make "$MAKE_PARAMS" "$DEFCONFIG"
-	cp "$DEF_REGENED" "$DEFCONFIG"
-	tg_post_build "$DEF_REGENED"
-	echo -e "\nSuccessfully regenerated defconfig at $DEFCONFIG"
-	exit
+make $MAKE_PARAMS mrproper
+make $MAKE_PARAMS $DEFCONFIG
+cp $DEFREGENED $MAIN_DEF
+if [ -f "$DEFREGENED" ]; then
+echo ".config: $DEFREGENED"
+tg_post_build "$DEFREGENED"
 fi
 
-if [[ $1 = "-c" || $1 = "--clean" ]]; then
-	rm -rf out
-	echo "Cleaned output folder"
-fi
+# Wipe output folder
+rm -rf "$KERNEL_SRC"/out
+echo "Cleaned output folder"
 
 mkdir -p out
 make $MAKE_PARAMS $DEFCONFIG
@@ -106,8 +117,7 @@ if [ -f "$kernel" ] && [ -f "$dtb" ] && [ -f "$dtbo" ]; then
 	fi
 cp $kernel AnyKernel3
 cp $dtb AnyKernel3/dtb
-tg_post_build "$dtbo"
-python3 .circleci/mkdtboimg.py create AnyKernel3/dtbo.img --page_size=4096 $dtbo
+python3 scripts/dtc/libfdt/mkdtboimg.py create AnyKernel3/dtbo.img --page_size=4096 $dtbo
 cp $(find out/modules/lib/modules/5.4* -name '*.ko') AnyKernel3/modules/vendor/lib/modules/
 cp out/modules/lib/modules/5.4*/modules.{alias,dep,softdep} AnyKernel3/modules/vendor/lib/modules
 cp out/modules/lib/modules/5.4*/modules.order AnyKernel3/modules/vendor/lib/modules/modules.load
@@ -115,12 +125,18 @@ sed -i 's/\(kernel\/[^: ]*\/\)\([^: ]*\.ko\)/\/vendor\/lib\/modules\/\2/g' AnyKe
 sed -i 's/.*\///g' AnyKernel3/modules/vendor/lib/modules/modules.load
 rm -rf out/arch/arm64/boot out/modules
 	cd AnyKernel3
-	zip -r9 "$ZIPNAME" * -x .git README.md *placeholder
+	zip -r9 "$ZIPNAME" * -x .git banner README.md *placeholder
 	echo "Zip: $ZIPNAME"
 	tg_post_build "$ZIPNAME"
 	cd ..
 	rm -rf AnyKernel3
 	echo -e "\nCompleted in $((SECONDS / 60)) minute(s) and $((SECONDS % 60)) second(s) !"
-	exit 1
 fi
-exit
+echo "Finished"
+############################################################################
+
+# Remove testing of System.map as test always fails to check for file
+# DO NOT MODIFY!!!!
+sed -i '13d;14d;15d;16d;17d' "$KERNEL_DIR"/scripts/depmod.sh
+
+exit 0

@@ -22,13 +22,13 @@ echo "$(pwd)"
 cd ../..
 
 # Clone Kernel Source
-BRANCH="R0.6"
+BRANCH="R0.8"
 echo "Downloading Kernel Source branch $BRANCH"
 mkdir $BASE_DIR/Kernel
 KERNEL_SRC="$BASE_DIR"/Kernel
 OUTPUT="$KERNEL_SRC"/out
 gsc https://github.com/KazuDante89/android_kernel_ghost_lisa.git -b Proton_$BRANCH $KERNEL_SRC
-echo "Kernel Source Completed"
+echo "Cloning Kernel Source Completed"
 
 echo "Cloning AnyKernel3"
 mkdir "$BASE_DIR"/AnyKernel3
@@ -36,8 +36,9 @@ AK3_DIR="$BASE_DIR"/AnyKernel3
 gsc https://github.com/ghostrider-reborn/AnyKernel3.git -b lisa $AK3_DIR
 echo "AnyKernel3 Completed"
 
+# Exports
+export  BASE_DIR TC_DIR KERNEL_SRC OUTPUT AK3_DIR BNAME BREV BRANCH TELEGRAM
+
 # Copy script over to source
 cd $KERNEL_SRC
-echo "$(pwd)"
-export TC_DIR KERNEL_SRC OUTPUT AK3_DIR BRANCH
-bash <(curl -s https://raw.githubusercontent.com/KazuDante89/android_kernel_ghost_lisa/Proton_R0.6/.circleci/build.sh)
+bash .circleci/build.sh
