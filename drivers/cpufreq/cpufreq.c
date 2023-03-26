@@ -2447,8 +2447,10 @@ static int cpufreq_set_policy(struct cpufreq_policy *policy,
 	new_data.min = freq_qos_read_value(&policy->constraints, FREQ_QOS_MIN);
 	new_data.max = freq_qos_read_value(&policy->constraints, FREQ_QOS_MAX);
 
-	if (cpumask_test_cpu(policy->cpu, cpu_perf_mask))
-      cpufreq_verify_within_limits(&new_data, CONFIG_CPUFREQ_MINFREQ_BIG, new_data.max);
+	if (cpumask_test_cpu(policy->cpu, cpu_lp_mask))
+      cpufreq_verify_within_limits(&new_data, CONFIG_CPUFREQ_MINFREQ_LITTLE, new_data.max);
+  else if (cpumask_test_cpu(policy->cpu, cpu_perf_mask))
+           cpufreq_verify_within_limits(&new_data, CONFIG_CPUFREQ_MINFREQ_BIG, new_data.max);
   else if (cpumask_test_cpu(policy->cpu, cpu_prime_mask))
            cpufreq_verify_within_limits(&new_data, CONFIG_CPUFREQ_MINFREQ_PRIME, new_data.max);
 

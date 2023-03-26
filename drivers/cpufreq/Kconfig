@@ -208,9 +208,15 @@ config CPU_FREQ_GOV_SCHEDUTIL
 
 comment "CPU frequency scaling drivers"
 
+config CPUFREQ_MINFREQ_LITTLE
+	int "Default minimum frequency for Little Clusters"
+	default 940800
+	help
+	  This sets the minimum frequency for little clusters
+
 config CPUFREQ_MINFREQ_BIG
 	int "Default minimum frequency for Big Clusters"
-	default 691200
+	default 940800
 	help
 	  This sets the minimum frequency for big clusters
 
