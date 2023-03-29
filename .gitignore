@@ -152,3 +152,4 @@ arch/*/configs/vendor/*_defconfig
 
 # build zips
 *.zip
+regen.sh
