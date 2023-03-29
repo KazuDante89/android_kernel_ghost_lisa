@@ -91,6 +91,7 @@ modules.order
 !.gitattributes
 !.gitignore
 !.mailmap
+!.circleci
 
 #
 # Generated include files
