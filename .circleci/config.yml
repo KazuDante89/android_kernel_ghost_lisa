@@ -10,7 +10,7 @@ jobs:
            git config --global user.name "kazudante89"
            git config --global user.email "karlemmanueldorvil@gmail.com"
            git config --global color.ui false
-           bash <(curl -s https://raw.githubusercontent.com/KazuDante89/android_kernel_ghost_lisa/Electron_R0.0/.circleci/setup.sh)
+           bash <(curl -s https://raw.githubusercontent.com/KazuDante89/android_kernel_ghost_lisa/Electron_R0.1/.circleci/setup.sh)
 workflows:
   version: 2.1
   cooking:
