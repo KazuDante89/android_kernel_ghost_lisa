@@ -73,7 +73,7 @@ DEFCONFIG="lisa_defconfig"
 DEFREGENED="out/.config"
 MAIN_DEF="arch/arm64/configs/lisa_defconfig"
 
-BLDV="v0.0.0.0"
+BLDV="v0.0.0.1"
 ZIPNAME="Electron_$BRANCH-$BLDV.zip"
 
 MAKE_PARAMS="O=out ARCH=arm64 CC=clang CLANG_TRIPLE=aarch64-linux-gnu- LLVM=1 LLVM_IAS=1 \
@@ -88,6 +88,8 @@ cp $DEFREGENED $MAIN_DEF
 if [ -f "$DEFREGENED" ]; then
 echo ".config: $DEFREGENED"
 tg_post_build "$DEFREGENED"
+echo "just to make sure ..."
+cp $DEFREGENED $DEFCONFIG
 fi
 
 # Wipe output folder

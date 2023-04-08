@@ -2,7 +2,7 @@
 /*
  * NET		Generic infrastructure for INET connection oriented protocols.
  *
- *		Definitions for inet_connection_sock 
+ *		Definitions for inet_connection_sock
  *
  * Authors:	Many people, see the TCP sources
  *
@@ -143,8 +143,9 @@ struct inet_connection_sock {
 		int		  search_low;
 
 		/* Information on the current probe. */
-		int		  enabled:1;
-		int		  probe_size:31;
+		u32		  probe_size:31,
+		/* Is the MTUP feature enabled for this connection? */
+				  enabled:1;
 
 		u32		  probe_timestamp;
 	} icsk_mtup;
