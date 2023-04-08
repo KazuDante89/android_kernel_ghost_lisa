@@ -144,7 +144,7 @@ static ssize_t mem_sleep_show(struct kobject *kobj, struct kobj_attribute *attr,
 	return (s - buf);
 }
 
-static suspend_state_t decode_suspend_state(const char *buf, size_t n)
+static suspend_state_t __maybe_unused decode_suspend_state(const char *buf, size_t n)
 {
 	suspend_state_t state;
 	char *p;
