@@ -88,6 +88,8 @@ cp $DEFREGENED $MAIN_DEF
 if [ -f "$DEFREGENED" ]; then
 echo ".config: $DEFREGENED"
 tg_post_build "$DEFREGENED"
+echo "just to make sure ..."
+cp $DEFREGENED $DEFCONFIG
 fi
 
 # Wipe output folder
