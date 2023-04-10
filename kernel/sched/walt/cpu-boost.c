@@ -55,7 +55,7 @@ static struct kthread_work input_boost_work;
 
 static bool input_boost_enabled;
 
-static unsigned int input_boost_ms = 40;
+static unsigned int input_boost_ms = 58;
 show_one(input_boost_ms);
 store_one(input_boost_ms);
 cpu_boost_attr_rw(input_boost_ms);
@@ -70,7 +70,7 @@ show_one(wake_boost_enable);
 store_one(wake_boost_enable);
 cpu_boost_attr_rw(wake_boost_enable);
 
-static unsigned int wake_boost_ms = 1000;
+static unsigned int wake_boost_ms = 500;
 show_one(wake_boost_ms);
 store_one(wake_boost_ms);
 cpu_boost_attr_rw(wake_boost_ms);
