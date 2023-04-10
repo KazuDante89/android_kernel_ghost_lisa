@@ -304,7 +304,7 @@ int sched_boost_handler(struct ctl_table *table, int write,
 
 	mutex_lock(&boost_mutex);
 
-	if (task_is_booster(current))
+	if (task_is_zygote(current))
 		return 0;
 
 	ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
