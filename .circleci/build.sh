@@ -73,7 +73,7 @@ DEFCONFIG="lisa_defconfig"
 DEFREGENED="out/.config"
 MAIN_DEF="arch/arm64/configs/lisa_defconfig"
 
-BLDV="v0.0.1"
+BLDV="v0.0.2"
 ZIPNAME="Neutron_$BRANCH-$BLDV.zip"
 
 MAKE_PARAMS="O=out ARCH=arm64 CC=clang CLANG_TRIPLE=aarch64-linux-gnu- LLVM=1 LLVM_IAS=1 \
@@ -107,6 +107,7 @@ make -j$(nproc --all) $MAKE_PARAMS INSTALL_MOD_PATH=modules INSTALL_MOD_STRIP=1 
 kernel="out/arch/arm64/boot/Image"
 dtb="out/arch/arm64/boot/dts/vendor/qcom/yupik.dtb"
 dtbo="out/arch/arm64/boot/dts/vendor/qcom/lisa-sm7325-overlay.dtbo"
+mkdtboimg=".circleci/mkdtboimg.py"
 
 if [ -f "$kernel" ] && [ -f "$dtb" ] && [ -f "$dtbo" ]; then
 	echo -e "\nKernel compiled succesfully! Zipping up...\n"
@@ -119,7 +120,7 @@ if [ -f "$kernel" ] && [ -f "$dtb" ] && [ -f "$dtbo" ]; then
 	fi
 cp $kernel AnyKernel3
 cp $dtb AnyKernel3/dtb
-python3 .circleci/mkdtboimg.py create AnyKernel3/dtbo.img --page_size=4096 $dtbo
+python3 $mkdtboimg create AnyKernel3/dtbo.img --page_size=4096 $dtbo
 cp $(find out/modules/lib/modules/5.4* -name '*.ko') AnyKernel3/modules/vendor/lib/modules/
 cp out/modules/lib/modules/5.4*/modules.{alias,dep,softdep} AnyKernel3/modules/vendor/lib/modules
 cp out/modules/lib/modules/5.4*/modules.order AnyKernel3/modules/vendor/lib/modules/modules.load
