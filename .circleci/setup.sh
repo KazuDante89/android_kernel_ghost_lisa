@@ -22,7 +22,7 @@ echo "$(pwd)"
 cd ../..
 
 # Clone Kernel Source
-BRANCH="R0.1"
+BRANCH="R0.2"
 echo "Downloading Kernel Source branch $BRANCH"
 mkdir $BASE_DIR/Kernel
 KERNEL_SRC="$BASE_DIR"/Kernel
