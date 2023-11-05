@@ -8457,7 +8457,7 @@ int can_migrate_task(struct task_struct *p, struct lb_env *env)
 	env->flags &= ~LBF_ALL_PINNED;
 
 #ifdef CONFIG_SCHED_WALT
-	if (static_branch_unlikely(&sched_energy_enabled)) {
+	if (static_branch_unlikely) {
 		struct root_domain *rd = env->dst_rq->rd;
 
 		if ((rcu_dereference(rd->pd) && !sd_overutilized(env->sd)) &&
