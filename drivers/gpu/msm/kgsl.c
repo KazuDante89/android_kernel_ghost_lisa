@@ -4661,14 +4661,7 @@ static long kgsl_run_one_worker(struct kthread_worker *worker,
 int __init kgsl_core_init(void)
 {
 	int result = 0;
-	struct sched_param sp = { .sched_priority = 1 };
-	int ret;
-
-ret = sched_setscheduler(0, SCHED_FIFO, &sp);
-if (ret == -1) {
-  perror("sched_setscheduler");
-  return 1;
-}
+	struct sched_param param = { .sched_priority = 16 };
 
 	place_marker("M - DRIVER KGSL Init");
 
