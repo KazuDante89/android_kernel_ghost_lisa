@@ -48,7 +48,7 @@ static const u32 pelt8_runnable_avg_yN_inv[] = {
 #define PELT8_LOAD_AVG_PERIOD 8
 #define PELT8_LOAD_AVG_MAX 12336
 
-extern u32 *pelt_runnable_avg_yN_inv;
+extern const u32 *pelt_runnable_avg_yN_inv;
 extern int pelt_load_avg_period;
 extern int pelt_load_avg_max;
 

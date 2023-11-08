@@ -32,7 +32,7 @@
 
 int pelt_load_avg_period = PELT10_LOAD_AVG_PERIOD;
 int pelt_load_avg_max = PELT10_LOAD_AVG_MAX;
-const u32 *pelt_runnable_avg_yN_inv = pelt10_runnable_avg_yN_inv;
+u32 *pelt_runnable_avg_yN_inv = pelt10_runnable_avg_yN_inv;
 unsigned int sysctl_sched_pelt_halflife = 10;
 
 int get_pelt_halflife(void)
@@ -51,30 +51,35 @@ int num = *(int *)data;
 		pelt_load_avg_period = PELT8_LOAD_AVG_PERIOD;
 		pelt_load_avg_max = PELT8_LOAD_AVG_MAX;
 		pelt_runnable_avg_yN_inv = pelt8_runnable_avg_yN_inv;
+		sysctl_sched_pelt_halflife = num;
 		pr_info("PELT half life is set to %dms\n", num);
 		break;
 	case PELT10_LOAD_AVG_PERIOD:
 		pelt_load_avg_period = PELT10_LOAD_AVG_PERIOD;
 		pelt_load_avg_max = PELT10_LOAD_AVG_MAX;
 		pelt_runnable_avg_yN_inv = pelt10_runnable_avg_yN_inv;
+		sysctl_sched_pelt_halflife = num;
 		pr_info("PELT half life is set to %dms\n", num);
 		break;
 	case PELT16_LOAD_AVG_PERIOD:
 		pelt_load_avg_period = PELT16_LOAD_AVG_PERIOD;
 		pelt_load_avg_max = PELT16_LOAD_AVG_MAX;
 		pelt_runnable_avg_yN_inv = pelt16_runnable_avg_yN_inv;
+		sysctl_sched_pelt_halflife = num;
 		pr_info("PELT half life is set to %dms\n", num);
 		break;
 	case PELT24_LOAD_AVG_PERIOD:
 		pelt_load_avg_period = PELT24_LOAD_AVG_PERIOD;
 		pelt_load_avg_max = PELT24_LOAD_AVG_MAX;
 		pelt_runnable_avg_yN_inv = pelt24_runnable_avg_yN_inv;
+		sysctl_sched_pelt_halflife = num;
 		pr_info("PELT half life is set to %dms\n", num);
 		break;
 	case PELT32_LOAD_AVG_PERIOD:
 		pelt_load_avg_period = PELT32_LOAD_AVG_PERIOD;
 		pelt_load_avg_max = PELT32_LOAD_AVG_MAX;
 		pelt_runnable_avg_yN_inv = pelt32_runnable_avg_yN_inv;
+		sysctl_sched_pelt_halflife = num;
 		pr_info("PELT half life is set to %dms\n", num);
 		break;
 	default:
@@ -91,6 +96,23 @@ int set_pelt_halflife(int num)
 	return stop_machine(__set_pelt_halflife, &num, NULL);
 }
 EXPORT_SYMBOL_GPL(set_pelt_halflife);
+
+int sched_pelt_halflife(struct ctl_table *table, int write, void *buffer,
+			size_t *lenp, loff_t *ppos)
+{
+	int ret;
+	static DEFINE_MUTEX(mutex);
+
+	mutex_lock(&mutex);
+	ret = proc_dointvec(table, write, buffer, lenp, ppos);
+
+	if (!ret && write)
+		set_pelt_halflife(sysctl_sched_pelt_halflife);
+
+	mutex_unlock(&mutex);
+
+	return ret;
+}
 
 static int __init set_pelt(char *str)
 {
