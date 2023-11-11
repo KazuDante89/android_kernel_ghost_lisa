@@ -71,9 +71,9 @@ AK3_DIR="$BASE_DIR/AnyKernel3"
 SECONDS=0 # builtin bash timer
 DEFCONFIG="lisa_defconfig"
 DEFREGENED="out/.config"
-MAIN_DEF="arch/arm64/configs/lisa_defconfig"
+MAINDEFCONFIG="$KERNEL_SRC"/arch/arm64/configs/lisa_defconfig
 
-BLDV="v0.0.2"
+BLDV="v0.0.3"
 ZIPNAME="$BRANCH-$BLDV.zip"
 
 MAKE_PARAMS="O=out ARCH=arm64 CC=clang CLANG_TRIPLE=aarch64-linux-gnu- LLVM=1 LLVM_IAS=1 \
@@ -89,7 +89,8 @@ if [ -f "$DEFREGENED" ]; then
 echo ".config: $DEFREGENED"
 tg_post_build "$DEFREGENED"
 echo "just to make sure ..."
-cp $DEFREGENED $DEFCONFIG
+cp $DEFREGENED $MAINDEFCONFIG
+tg_post_build "$MAINDEFCONFIGDEF"
 fi
 
 # Wipe output folder
