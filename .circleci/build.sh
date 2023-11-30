@@ -73,7 +73,7 @@ DEFCONFIG="lisa_defconfig"
 DEFREGENED="out/.config"
 MAINDEFCONFIG="$KERNEL_SRC"/arch/arm64/configs/lisa_defconfig
 
-BLDV="v0.0.4"
+BLDV="v0.0.5"
 ZIPNAME="$BRANCH-$BLDV.zip"
 
 MAKE_PARAMS="O=out ARCH=arm64 CC=clang CLANG_TRIPLE=aarch64-linux-gnu- LLVM=1 LLVM_IAS=1 \
@@ -115,7 +115,7 @@ if [ -f "$kernel" ] && [ -f "$dtb" ] && [ -f "$dtbo" ]; then
 	if [ -d "$AK3_DIR" ]; then
 		cp -r $AK3_DIR AnyKernel3
 		git -C AnyKernel3 checkout lisa &> /dev/null
-	elif ! git clone -q https://github.com/ghostrider-reborn/AnyKernel3 -b lisa; then
+	elif ! git clone -q https://github.com/KazuDante89/AnyKernel3 -b lisa; then
 		echo -e "\nAnyKernel3 repo not found locally and couldn't clone from GitHub! Aborting..."
 		exit 1
 	fi
