@@ -33,7 +33,7 @@ echo "Cloning Kernel Source Completed"
 echo "Cloning AnyKernel3"
 mkdir "$BASE_DIR"/AnyKernel3
 AK3_DIR="$BASE_DIR"/AnyKernel3
-gsc https://github.com/ghostrider-reborn/AnyKernel3.git -b lisa $AK3_DIR
+gsc https://github.com/KazuDante89/AnyKernel3.git -b lisa $AK3_DIR
 echo "AnyKernel3 Completed"
 
 # Exports
