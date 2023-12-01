@@ -114,7 +114,7 @@ if [ -f "$kernel" ] && [ -f "$dtb" ] && [ -f "$dtbo" ]; then
 	if [ -d "$AK3_DIR" ]; then
 		cp -r $AK3_DIR AnyKernel3
 		git -C AnyKernel3 checkout lisa &> /dev/null
-	elif ! git clone -q https://github.com/ghostrider-reborn/AnyKernel3 -b lisa; then
+	elif ! git clone -q https://github.com/KazuDante89/AnyKernel3 -b lisa; then
 		echo -e "\nAnyKernel3 repo not found locally and couldn't clone from GitHub! Aborting..."
 		exit 1
 	fi
